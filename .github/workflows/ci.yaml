@@ -1,5 +1,5 @@
-name: Go
-on: [pull_request]
+name: GoDump
+on: [push]
 jobs:
   check-application:
     runs-on: ubuntu-latest
