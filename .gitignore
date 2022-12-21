@@ -1,0 +1,5 @@
+.env
+.devcontainer
+.vscode
+.logger.json
+.docker
