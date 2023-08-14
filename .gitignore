@@ -1,5 +1,5 @@
 config
-backup
+./backup
 .google_drive/token.json
 .docker
 GoDump
