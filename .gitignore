@@ -2,3 +2,4 @@ config
 backup
 .google_drive/token.json
 .docker
+GoDump
