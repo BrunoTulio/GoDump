@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: testname
+    networks:
+      - backup_net
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/go/src
+    depends_on:
+      - db
+      - mail
+  mail:
+    image: mailhog/mailhog:latest
+    container_name: testmail
+    restart: always
+    networks:
+      - backup_net
+    ports:
+      - 1025:1025
+      - 8025:8025
+  db:
+    image: postgres:13.8-alpine
+    container_name: testdb
+    restart: always
+    tty: true
+    networks:
+      - backup_net
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.docker/data:/var/lib/postgresql/data
+      - ./.docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test
+networks:
+  backup_net:
+    driver: bridge
