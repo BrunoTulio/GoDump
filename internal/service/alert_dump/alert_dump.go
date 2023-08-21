@@ -5,7 +5,7 @@ import "github.com/BrunoTulio/GoDump/pkg/mail"
 type (
 	AlertCommand struct {
 		Message string
-		Mail    string
+		Mail    []string
 	}
 
 	AlertDumpService interface {
@@ -20,7 +20,7 @@ type (
 // Execute implements AlertDumpService.
 func (a *alertDumpMailService) Execute(command AlertCommand) error {
 	return a.mail.Send(mail.Message{
-		Recipient: []string{command.Mail},
+		Recipient: command.Mail,
 		Subject:   "GoDump Backup",
 		Body:      command.Message,
 	})

@@ -12,9 +12,9 @@ type (
 	Priority int
 
 	Alert struct {
-		SendMail string `yaml:"send_mail"`
-		Enable   bool   `yaml:"enable"`
-		Mail     Mail   `yaml:"mail"`
+		SendMail []string `yaml:"send_mail"`
+		Enable   bool     `yaml:"enable"`
+		Mail     Mail     `yaml:"mail"`
 	}
 	Mail struct {
 		User           string `yaml:"user"`

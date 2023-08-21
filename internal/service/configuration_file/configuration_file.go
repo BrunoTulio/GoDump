@@ -38,7 +38,7 @@ func (s *configurationFileService) Create() error {
 			Enable: false,
 		},
 		Alert: domain.Alert{
-			SendMail: "sendtomail@mail.com",
+			SendMail: []string{"sendtomail@mail.com", "sendtomail2@mail.com"},
 			Enable:   true,
 			Mail: domain.Mail{
 				User:           "user@example.com",
