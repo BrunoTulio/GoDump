@@ -1,7 +1,7 @@
 name: GoDump
 on: [push]
 jobs:
-  check-application:
+  process-application:
     runs-on: ubuntu-latest
 
     steps:
