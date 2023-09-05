@@ -17,10 +17,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// startCmd represents the dump command
-var startCmd = &cobra.Command{
-	Use:   "start",
-	Short: "s",
+// autoCmd represents the dump command
+var autoCmd = &cobra.Command{
+	Use:   "auto",
+	Short: "a",
 	Long:  `Execute backup cron starting`,
 	Run: func(cmd *cobra.Command, args []string) {
 		factory.MakeLogger()
@@ -38,5 +38,5 @@ var startCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(startCmd)
+	rootCmd.AddCommand(autoCmd)
 }

@@ -5,7 +5,7 @@ import "google.golang.org/api/drive/v2"
 const (
 	PathGoogleDrive                  = "./.google_drive"
 	PathGoogleDriveCredentialAccount = PathGoogleDrive + "/credentials.json"
-	PathToken                        = "/token"
+	PathToken                        = "./token"
 	PathGoogleDriveToken             = PathToken + "/token.json"
 	PathConfig                       = "./config"
 	PathConfigFile                   = PathConfig + "/config.yaml"

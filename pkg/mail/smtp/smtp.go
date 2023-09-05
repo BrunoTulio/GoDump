@@ -10,6 +10,7 @@ import (
 	"net/smtp"
 	"strings"
 
+	"github.com/BrunoTulio/GoDump/pkg/logger"
 	"github.com/BrunoTulio/GoDump/pkg/mail"
 )
 
@@ -28,7 +29,8 @@ func (m mailSmtp) Send(message mail.Message) error {
 	auth := smtp.PlainAuth("", m.User, m.Password, m.Host)
 
 	if m.InsureSecurity {
-		return m.sendInsecureSkip(auth, message, data)
+		err = m.sendInsecureSkip(auth, message, data)
+		return err
 	}
 
 	return m.send(auth, message, data)
@@ -39,11 +41,11 @@ func (e mailSmtp) send(auth smtp.Auth, message mail.Message, data []byte) error 
 		message.Recipient, data)
 }
 
-func (e mailSmtp) sendInsecureSkip(auth smtp.Auth, message mail.Message, data []byte) error {
+func (e mailSmtp) sendInsecureSkip(auth smtp.Auth, message mail.Message, data []byte) (err error) {
 	smtpConn, err := smtp.Dial(fmt.Sprintf("%s:%d", e.Host, e.Port))
 
 	if err != nil {
-		return err
+		return
 	}
 
 	tlsConfig := &tls.Config{
@@ -52,49 +54,45 @@ func (e mailSmtp) sendInsecureSkip(auth smtp.Auth, message mail.Message, data []
 	err = smtpConn.StartTLS(tlsConfig)
 
 	if err != nil {
-		return err
+		return
 	}
 
 	defer func() {
-		err := smtpConn.Quit()
-		if err != nil {
-
-		}
+		err = smtpConn.Quit()
+		logger.Error(err)
 	}()
 
 	if err = smtpConn.Auth(auth); err != nil {
-		return err
+		return
 	}
 
 	// To && From
 	if err = smtpConn.Mail(e.From); err != nil {
-		return err
+		return
 	}
 
 	recs := strings.Join(message.Recipient, ",")
 	if err = smtpConn.Rcpt(recs); err != nil {
-		return err
+		return
 	}
 
 	// Data
 	w, err := smtpConn.Data()
 	if err != nil {
-		return err
+		return
 	}
 
 	defer func() {
-		err := w.Close()
-		if err != nil {
-
-		}
+		err = w.Close()
+		logger.Error(err)
 	}()
 
 	_, err = w.Write(data)
 	if err != nil {
-		return err
+		return
 	}
 
-	return nil
+	return
 }
 
 func (e mailSmtp) data(message mail.Message) ([]byte, error) {

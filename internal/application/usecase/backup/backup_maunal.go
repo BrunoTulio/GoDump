@@ -13,8 +13,8 @@ import (
 
 type (
 	BackupUseCase interface {
-		Generate() error
-		GenerateByKey(key string) error
+		Generate(fileType *domain.Type) error
+		GenerateByKey(fileType *domain.Type, key string) error
 	}
 	backupUseCase struct {
 		configurationFileService configuration_file.ConfigurationFileService
@@ -23,7 +23,7 @@ type (
 )
 
 // Generate implements BackupUseCase.
-func (b *backupUseCase) Generate() error {
+func (b *backupUseCase) Generate(fileType *domain.Type) error {
 
 	config, err := b.configurationFileService.Get()
 
@@ -35,6 +35,10 @@ func (b *backupUseCase) Generate() error {
 
 	if err != nil {
 		return err
+	}
+
+	if fileType != nil {
+		config.Dumps.UpdateType(fileType)
 	}
 
 	sort.Sort(config.Dumps)
@@ -57,7 +61,7 @@ func (b *backupUseCase) Generate() error {
 }
 
 // GenerateByKey implements BackupUseCase.
-func (b *backupUseCase) GenerateByKey(key string) error {
+func (b *backupUseCase) GenerateByKey(fileType *domain.Type, key string) error {
 
 	config, err := b.configurationFileService.Get()
 

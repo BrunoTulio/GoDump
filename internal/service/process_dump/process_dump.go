@@ -91,8 +91,7 @@ func (s *processDumpService) Backup(dump domain.Dump) (path string, err error) {
 
 	path = pathFile(dump)
 
-	cmd := exec.Command(
-		"pg_dump",
+	args := []string{
 		"--host",
 		dump.Host, //container db host
 		"--port",
@@ -100,11 +99,21 @@ func (s *processDumpService) Backup(dump domain.Dump) (path string, err error) {
 		"--username",
 		dump.Username, //container db username
 		"--dbname",
-		dump.Database, //container db database_name
-		"--format",
-		"tar", //container db format
+		dump.Database,
 		"--file",
 		path, //container loca/arquivo backup
+	}
+
+	if !dump.IsTypeSQL() {
+		args = append(args,
+			"--format",
+			"tar",
+		)
+	}
+
+	cmd := exec.Command(
+		"pg_dump",
+		args...,
 	)
 
 	cmd.Env = append(os.Environ(), fmt.Sprintf(`PGPASSWORD=%s`, dump.Password))
@@ -151,7 +160,13 @@ func (s *processDumpService) Backup(dump domain.Dump) (path string, err error) {
 
 func fileName(dump domain.Dump) string {
 	date := time.Now()
-	return fmt.Sprintf("%s_%s.dump", dump.Database, date.Format(constants.LayoutDate))
+	fileName := fmt.Sprintf("%s_%s%s",
+		dump.Database,
+		date.Format(constants.LayoutDate),
+		dump.Extension(),
+	)
+
+	return fileName
 }
 
 func pathFile(dump domain.Dump) string {

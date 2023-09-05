@@ -22,7 +22,7 @@ var settingCmd = &cobra.Command{
 	Long:  `Create configuration app system backup`,
 
 	Run: func(cmd *cobra.Command, args []string) {
-
+		factory.MakeLogger()
 		if isInitDriveConfiguration {
 			settingDriverService := factory.MakeDriveTokenService()
 

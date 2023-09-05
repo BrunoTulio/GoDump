@@ -23,7 +23,7 @@ func MakeAlterDumpService() alert_dump.AlertDumpService {
 		log.Fatal(err)
 	}
 
-	return alert_dump.New(MakeMail(config.Alert.Mail))
+	return alert_dump.New(MakeGoMail(config.Alert.Mail))
 }
 
 func MakeConfigurationFileService() configuration_file.ConfigurationFileService {

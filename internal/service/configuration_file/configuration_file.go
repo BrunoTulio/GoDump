@@ -58,6 +58,7 @@ func (s *configurationFileService) Create() error {
 				Password: "password",
 				Database: "database",
 				Priority: domain.Normal,
+				Type:     nil,
 			},
 		},
 	}

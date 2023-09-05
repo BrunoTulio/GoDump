@@ -33,6 +33,7 @@ type (
 		Password string   `yaml:"password"`
 		Database string   `yaml:"database"`
 		Priority Priority `yaml:"priority"`
+		Type     *Type    `yaml:"type"`
 	}
 
 	GoogleDrive struct {
@@ -49,6 +50,41 @@ type (
 		GoogleDrive          GoogleDrive   `yaml:"google_drive"`
 	}
 )
+
+func (c *Dump) UpdateType(fileType *Type) {
+	c.Type = fileType
+}
+
+func (c *Dump) NoHasType() bool {
+	return !c.HasType()
+}
+
+func (c *Dump) HasType() bool {
+	return c.Type != nil
+}
+
+func (c *Dump) Extension() string {
+	if c.NoHasType() {
+		return DefaultTypeExtension
+	}
+
+	return c.Type.Extension()
+}
+
+func (c *Dump) IsTypeSQL() bool {
+	return c.HasType() && *c.Type == SQL
+}
+
+func (c *Dump) IsTypeDump() bool {
+	return c.HasType() && *c.Type == DUMP
+}
+
+func (c Dumps) UpdateType(typeName *Type) {
+	for i := range c {
+		c[i].UpdateType(typeName)
+	}
+
+}
 
 func (c Dumps) Len() int {
 	return len(c)

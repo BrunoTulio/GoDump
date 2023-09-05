@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"sort"
+	"time"
 
+	"github.com/BrunoTulio/GoDump/internal/constants"
 	"github.com/BrunoTulio/GoDump/internal/domain"
 	"github.com/BrunoTulio/GoDump/internal/service/alert_dump"
 	"github.com/BrunoTulio/GoDump/internal/service/backup_files"
@@ -100,7 +102,7 @@ func (b *backupAutoUseCase) notifyError(config domain.Config, err error) {
 	}
 
 	b.alertDumpService.Execute(alert_dump.AlertCommand{
-		Message: fmt.Sprintf("Error GoDump %v", err),
+		Message: fmt.Sprintf("Error GoDump %v %s", err, time.Now().Format(constants.LayoutDate)),
 		Mail:    config.Alert.SendMail,
 	})
 }

@@ -4,12 +4,10 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: testname
     networks:
       - backup_net
-    ports:
-      - "8000:8000"
     volumes:
       - .:/go/src
     depends_on:

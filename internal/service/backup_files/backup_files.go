@@ -119,7 +119,8 @@ func readFiles(dump domain.Dump) (BackupFiles, error) {
 }
 
 func filaNameToDate(nameFile string) (time.Time, error) {
-	name := strings.ReplaceAll(nameFile, ".dump", "")
+	name := domain.ReplaceFileExtension(nameFile)
+
 	values := strings.Split(name, "_")
 
 	if len(values) != 2 {
