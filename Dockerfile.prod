@@ -8,6 +8,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" .
 
 FROM debian:bullseye-slim
 
+ENV POSTGRES_VERSION=15
+
 RUN apt-get update     \
   && apt-get install --no-install-recommends -y \
   lsb-release \
@@ -19,12 +21,7 @@ RUN apt-get update     \
   && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt-get update \
   && apt-get install --no-install-recommends -y  \
-  postgresql-client-15  \
-  postgresql-client-14  \
-  postgresql-client-13  \
-  postgresql-client-12  \
-  postgresql-client-11  \
-  postgresql-client-10  \
+  postgresql-client-${POSTGRES_VERSION}  \
   && apt-get clean \
   && rm -rf /etc/apt/sources.list.d/*
 
