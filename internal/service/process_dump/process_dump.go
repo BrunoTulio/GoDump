@@ -111,6 +111,10 @@ func (s *processDumpService) Backup(dump domain.Dump) (path string, err error) {
 		)
 	}
 
+	if dump.IsTypeSQL() {
+		args = append(args, "--column-inserts")
+	}
+
 	cmd := exec.Command(
 		"pg_dump",
 		args...,
